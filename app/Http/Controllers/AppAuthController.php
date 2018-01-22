@@ -46,18 +46,28 @@ class AppAuthController extends Controller
     public function applogin(Request $request){
         try{
             $serviceName = "login";
-            $validator = Validator::make($request->all(),[
-                'mobile_no' => 'required',
-                'password' => 'required',
-                'role' => 'required'
-            ]);
-
-            if ($validator->fails()) {
-                $data["message"] = "validation_error";
-                $data["errors"]  = $validator->messages()->toJson();
-                Seekahoo_lib::return_status('error', $serviceName,$data,'');
-                return response()->json(['success' => false,'status_code' => 100, 'error' => 'validation_error', 'message' => $validator->messages()->toJson()], 403);
+            $mobile_validate = Validator::make($request->all(),['mobile_no' => 'required|numeric|digits:10']);
+            if ($mobile_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $mobile_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$mobile_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The mobile no field is required and it must be valid.'], 403);
             }
+            $pwd_validate = Validator::make($request->all(),['password' => 'required|min:6']);
+            if ($pwd_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $pwd_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$pwd_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The password field is required and it must contain minimum 6 characters.'], 403);
+            }
+            $role_validate = Validator::make($request->all(),['role' => 'required|numeric']);
+            if ($role_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $role_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$role_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The role field is required and it must be valid.'], 403);
+            }
+
 
             $mobile_no = $request->mobile_no;
             $password = $request->password;
@@ -105,6 +115,10 @@ class AppAuthController extends Controller
         //echo "success";
         $data["message"] = "success";
         $data["token"] = $token;
+        $data["name"] = $check_user->name;
+        $data["email"] = $check_user->email;
+        $data["phone"] = $check_user->mobile_no;
+        $data["role"] = $check_user->role;
         Seekahoo_lib::return_status('success', $serviceName,$data,'');
         return response()->json(array('success' => true,'status_code' => 200,'data' => $data));
         //return response()->json(compact('token'));
@@ -115,20 +129,47 @@ class AppAuthController extends Controller
 
             $serviceName = "register";
 
-            $validator = Validator::make($request->all(),[
-              'role' => 'required',
-              'email'     => 'required',
-              'mobile_no'  => 'required|numeric',
-              'password'      => 'required',
-              'confirm_password'      => 'required|same:password',
-              'name'      => 'required',
-            ]);
-
-            if ($validator->fails()) {
-                $data["message"] = "validation_error";
-                $data["errors"]  = $validator->messages()->toJson();
-                Seekahoo_lib::return_status('error', $serviceName,$data,$validator->messages()->toJson());
-                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => $validator->messages()->toJson()], 403);
+            $name_validate = Validator::make($request->all(),['name' => 'required']);
+            if ($name_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $name_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$name_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The name field is required.'], 403);
+            }
+          $mobile_validate = Validator::make($request->all(),['mobile_no' => 'required|numeric|digits:10']);
+            if ($mobile_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $mobile_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$mobile_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The mobile no field is required and it must be valid.'], 403);
+            }
+            $email_validate = Validator::make($request->all(),['email' => 'required|email']);
+            if ($email_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $email_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$email_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The email field is required and it must be valid.'], 403);
+            }
+            $pwd_validate = Validator::make($request->all(),['password' => 'required|min:6']);
+            if ($pwd_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $pwd_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$pwd_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The password field is required and it must contain minimum 6 characters.'], 403);
+            }
+          $confpwd_validate = Validator::make($request->all(),['confirm_password' => 'required|same:password']);
+            if ($confpwd_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $confpwd_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$confpwd_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The confirm password field is required and it must be same as password.'], 403);
+            }
+            $role_validate = Validator::make($request->all(),['role' => 'required|numeric']);
+            if ($role_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $role_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$role_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The role field is required and it must be valid.'], 403);
             }
 
             $data = array(
@@ -177,7 +218,8 @@ class AppAuthController extends Controller
                   DB::beginTransaction();
                   $string = '0123456789';
                   $string_shuffled = str_shuffle($string);
-                  $otp = substr($string_shuffled, 1, 6);
+                  //$otp = substr($string_shuffled, 1, 6);
+                  $otp = '123456';
                   if ($mobile_no_first_exists > 0 && $email_first_exists > 0) {
                       $user_details = array(
                           'role' => $role,
@@ -257,14 +299,14 @@ class AppAuthController extends Controller
         try{
             $serviceName = "resend_code";
             $validator = Validator::make($request->all(),[
-              'mobile_no'  => 'required|numeric',
+              'mobile_no'  => 'required|numeric|digits:10',
             ]);
 
             if ($validator->fails()) {
               $data["message"] = "validation_error";
               $data["errors"]  = $validator->messages()->toJson();
               Seekahoo_lib::return_status('error', $serviceName,$data,$validator->messages()->toJson());
-              return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => $validator->messages()->toJson()], 403);
+              return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The mobile no field is required and it must be valid'], 403);
             }
 
             $data = array(
@@ -304,19 +346,28 @@ class AppAuthController extends Controller
     public function confirm_otp(Request $request){
         try{
             $serviceName = "confirm_otp";
-            $validator = Validator::make($request->all(),[
-              'mobile_no'  => 'required|numeric',
-              'otp'  => 'required|numeric',
-              'password'=>'required',
-            ]);
 
-            if ($validator->fails()) {
-              $data["message"] = "validation_error";
-              $data["errors"]  = $validator->messages()->toJson();
-              Seekahoo_lib::return_status('error', $serviceName,$data,$validator->messages()->toJson());
-              return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => $validator->messages()->toJson()], 403);
+            $mobile_validate = Validator::make($request->all(),['mobile_no' => 'required|numeric|digits:10']);
+            if ($mobile_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $mobile_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$mobile_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The mobile no field is required and it must be valid.'], 403);
             }
-
+            $pwd_validate = Validator::make($request->all(),['password' => 'required|min:6']);
+            if ($pwd_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $pwd_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$pwd_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The password field is required and it must contain minimum 6 characters.'], 403);
+            }
+            $otp_validate = Validator::make($request->all(),['otp' => 'required|numeric']);
+            if ($otp_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $otp_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$otp_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The otp field is required.'], 403);
+            }
             /*Check Invalid Otp*/
             $invalid = User::where('otp', $request['otp'])->where('mobile_no', $request['mobile_no'])->count();
       
@@ -416,14 +467,14 @@ class AppAuthController extends Controller
         try{
               $serviceName = "forget_password";
               $validator = Validator::make($request->all(),[
-                'mobile_no'  => 'required|numeric',               
+                'mobile_no'  => 'required|numeric|digits:10',               
               ]);
 
               if ($validator->fails()) {
                   $data["message"] = "validation_error";
                   $data["errors"]  = $validator->messages()->toJson();
                   Seekahoo_lib::return_status('error', $serviceName,$data,$validator->messages()->toJson());
-                  return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => $validator->messages()->toJson()], 403);
+                  return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The mobile no field is required and it must be valid'], 403);
               }
 
               $data = array(
@@ -440,9 +491,10 @@ class AppAuthController extends Controller
                   {
                       $string = '0123456789';
                       $string_shuffled = str_shuffle($string);
-                      $otp = substr($string_shuffled, 1, 6);
+                      //$otp = substr($string_shuffled, 1, 6);
+                      $otp = '123456';
 
-                      $forget_password = User::where('user_id', $user->user_id);
+                      $forget_password = User::where('id', $user->id);
                       $forget_password->update(array(
                                             'otp' => $otp));
                       if( $forget_password )
@@ -456,17 +508,11 @@ class AppAuthController extends Controller
                           );
 
                           //$sendsms = Helper::sendSMS($msgData);
-                          if( $sendsms){
+                          //if( $sendsms){
                           $data["message"] = "Otp sent Successfully";
                           Seekahoo_lib::return_status('success', $serviceName,$data,'');
                           return response()->json(array('success' => true,'status_code' => 200,'message' => 'Otp sent Successfully.'));
-                      }
-                      else
-                      {
-                          $data["message"] = "Unable to send OTP.";
-                          Seekahoo_lib::return_status('error', $serviceName,$data,'');
-                          return response()->json(array('success' => false,'status_code' => 100,'error' => 'server_error', 'message' =>  $data["message"], 'data' =>  $data["message"]),402);
-                      }
+                          //}
                   }
                   else
                   {
@@ -493,20 +539,35 @@ class AppAuthController extends Controller
     public function confirm_forget_password_otp(Request $request){
         try{
             $serviceName = "confirm_forget_password_otp";
-            $validator = Validator::make($request->all(),[
-                'mobile_no'  => 'required|numeric',
-                'otp'  => 'required|numeric',
-                'new_password'  => 'required',
-                'confirm_password'  =>'required|same:new_password',
-            ]);
 
-            if ($validator->fails()) {
-              $data["message"] = "validation_error";
-              $data["errors"]  = $validator->messages()->toJson();
-              Seekahoo_lib::return_status('error', $serviceName,$data,$validator->messages()->toJson());
-              return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => $validator->messages()->toJson()], 403);
+            $mobile_validate = Validator::make($request->all(),['mobile_no' => 'required|numeric|digits:10']);
+            if ($mobile_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $mobile_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$mobile_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The mobile no field is required and it must be valid.'], 403);
             }
-
+            $otp_validate = Validator::make($request->all(),['otp' => 'required|numeric']);
+            if ($otp_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $otp_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$otp_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The otp field is required.'], 403);
+            }
+            $pwd_validate = Validator::make($request->all(),['new_password' => 'required|min:6']);
+            if ($pwd_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $pwd_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$pwd_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The password field is required and it must contain minimum 6 characters.'], 403);
+            }
+            $confpwd_validate = Validator::make($request->all(),['confirm_password' => 'required|same:new_password']);
+            if ($confpwd_validate->fails()){
+               $data["message"] = "validation_error";
+               $data["errors"]  = $confpwd_validate->messages()->toJson();
+               Seekahoo_lib::return_status('error', $serviceName,$data,$confpwd_validate->messages()->toJson());
+                return response()->json(['success' => false,'status_code' => 100,'error' => 'validation_error', 'message' => 'The confirm password field is required and it must be same as password.'], 403);
+            }
             /*Check Invalid Otp*/
             $invalid = User::where('otp', $request['otp'])->where('mobile_no', $request['mobile_no'])->count();
       

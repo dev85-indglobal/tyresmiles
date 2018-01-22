@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/admin','Admin\AdminLoginController@adminLogin');
+Route::post('/admin','Admin\AdminLoginController@postAdminLogin');
+Route::get('/adminlogout','Admin\AdminLoginController@adminLogout');
+Route::group(['prefix' => 'admin','middleware' => 'isadmin'], function(){
+	Route::get('dashboard','Admin\AdminLoginController@dashboard');
+	Route::get('services-list','Admin\ServicesController@list');
 });
