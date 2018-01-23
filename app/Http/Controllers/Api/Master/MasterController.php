@@ -70,6 +70,7 @@ class MasterController extends Controller
 			foreach ($car_types as $ct) {
 					$return_arr[] = array(
 						'Car_id' =>$ct->id,
+						'type_id'=>$ct->type_id,
                         'Car_name' =>$ct->name,						
 					);
 			}

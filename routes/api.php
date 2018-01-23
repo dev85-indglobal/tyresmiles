@@ -36,6 +36,12 @@ Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
     //media
     Route::post('service_category_media_upload','Api\Media\MediaController@service_category_media_store');
 
+    //vendor_service_provider
+    Route::post('vendor_service_provider','Api\Service\ServiceProviderController@vendor_service_provider');
+    Route::get('get_vendor_service_provider','Api\Service\ServiceProviderController@get_vendor_service_providers');
+
+   //search
+    Route::get('search','Api\Search\SearchVendorsController@search');
 
 
 });
