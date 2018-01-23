@@ -17,4 +17,9 @@ Route::get('/adminlogout','Admin\AdminLoginController@adminLogout');
 Route::group(['prefix' => 'admin','middleware' => 'isadmin'], function(){
 	Route::get('dashboard','Admin\AdminLoginController@dashboard');
 	Route::get('services-list','Admin\ServicesController@list');
+	Route::get('cars-list','Admin\VehicleController@list');
+	Route::get('service-view/{id}','Admin\ServicesController@service_view');
+	Route::post('service-edit','Admin\ServicesController@service_edit');
+	Route::get('service-new','Admin\ServicesController@service_new');
+	Route::post('service-save','Admin\ServicesController@service_save');
 });
