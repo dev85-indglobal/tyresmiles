@@ -62,9 +62,9 @@ class MediaController extends Controller
 
 		    $records->save();
 
-		    $data["message"] = "service category media images Added Successfully";
+		    $data["message"] = "service category media Images Added Successfully";
 			Seekahoo_lib::return_status('success', $serviceName,$data,'');
-			return response()->json(['success' => true,'message' => "service category media images Added Successfully"],200);
+			return response()->json(['success' => true,'message' => "service category media Images Added Successfully"],200);
 		}
 		catch(Exception $e){
 			$data["message"] = "Something went wrong.<br />Please try again";
