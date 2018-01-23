@@ -39,4 +39,32 @@ class Helper{
 			return false;
 		}
 	}
+	public static function sendSMS($data){
+        try{
+            	$receipientno =  $data['recipient_no'];
+                $msgtxt = $data['msgtxt'];
+
+                if (!$receipientno || $receipientno == '' || !$msgtxt || $msgtxt == '') {
+                    return false;
+                }
+                $message = urlencode($msgtxt);
+                
+                $ch=curl_init();
+                curl_setopt($ch,CURLOPT_URL,"http://smsapi.24x7sms.com/api_2.0/SendSMS.aspx?APIKEY=G7SpdPXYh5O&MobileNo=$receipientno&SenderID=TESTIN&Message=$message&ServiceName=TEMPLATE_BASED");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                $buffer =curl_exec($ch);
+                curl_close($ch);
+
+
+                                if (empty($buffer)) {
+                                    return false;
+                                }
+
+                                Log::info($buffer);
+
+                                return $buffer;
+        }catch(Exception $e){
+            return false;
+        }       
+    }
 }

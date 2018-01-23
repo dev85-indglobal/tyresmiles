@@ -260,13 +260,13 @@ class AppAuthController extends Controller
               }
 
               // Send SMS
-              $msgtxt = "Your otp is ". $otp .". Otp will expire within 15 minutes :TyreSmiles";  
+              $msgtxt = "Your otp is ". $otp .". Otp will expire within 15 minutes :TYRESMILES";  
 
               $msgData = array(
                 'recipient_no' => $request->mobile_no,
                 'msgtxt' => $msgtxt
               );
-              //$sendsms = Helper::sendSMS($msgData);
+              $sendsms = Helper::sendSMS($msgData);
      
               //send mail
 
@@ -324,13 +324,13 @@ class AppAuthController extends Controller
             $otp = substr($string_shuffled, 1, 6);
 
             // Send SMS
-            $msgtxt = "Your otp is ". $otp .". Otp will expire within 15 minutes :TyreSmiles";
+            $msgtxt = "Your otp is ". $otp .". Otp will expire within 15 minutes :TYRESMILES";
 
             $msgData = array(
               'recipient_no' => $request->mobile_no,
               'msgtxt' => $msgtxt
             );
-            //$sendsms = Helper::sendSMS($msgData);
+            $sendsms = Helper::sendSMS($msgData);
 
             $data["message"] = "Otp Resent Successfully";
             Seekahoo_lib::return_status('success', $serviceName,$data,'');
@@ -418,7 +418,7 @@ class AppAuthController extends Controller
             $User->update($user_details); 
 
             // Send SMS
-            $msgtxt = "Registration Completed Successfully :TyreSmiles.";
+            $msgtxt = "Registration Completed Successfully :TYRESMILES";
 
             $msgData = array(
               'recipient_no' => $request->mobile_no,
@@ -500,19 +500,19 @@ class AppAuthController extends Controller
                       if( $forget_password )
                       {
                           // Send SMS
-                          $msgtxt = "Your otp is ". $otp .". Otp will expire within 15 minutes";
+                          $msgtxt = "Your otp is ". $otp .". Otp will expire within 15 minutes :TYRESMILES";
 
                           $msgData = array(
                             'recipient_no' => $request->mobile_no,
                             'msgtxt' => $msgtxt
                           );
 
-                          //$sendsms = Helper::sendSMS($msgData);
-                          //if( $sendsms){
+                          $sendsms = Helper::sendSMS($msgData);
+                          if( $sendsms){
                           $data["message"] = "Otp sent Successfully";
                           Seekahoo_lib::return_status('success', $serviceName,$data,'');
                           return response()->json(array('success' => true,'status_code' => 200,'message' => 'Otp sent Successfully.'));
-                          //}
+                          }
                   }
                   else
                   {
@@ -612,13 +612,13 @@ class AppAuthController extends Controller
             $User->update($user_details); 
 
             // Send SMS
-            $msgtxt = "password changed Successfully.";
+            $msgtxt = "password changed Successfully :TYRESMILES";
 
             $msgData = array(
               'recipient_no' => $request->mobile_no,
               'msgtxt' => $msgtxt
             );
-           // $sendsms = Helper::sendSMS($msgData);
+            //$sendsms = Helper::sendSMS($msgData);
 
             $data["message"] = "password changed Successfully.";
             Seekahoo_lib::return_status('success', $serviceName,$data,'');
