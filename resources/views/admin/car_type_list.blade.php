@@ -15,21 +15,21 @@
 						<p class="alert alert-danger">{{ Session::get('errormsg') }}</p>
 					@endif
                     <table id="general-table" class="table table-bordered table-hover">
-						<h1><center>Service Categories</center></h1>
+						<h1><center>List of Cars</center></h1>
 						<thead>
 						<tr>
 							<th>Sl No</th>
-							<th>Name</th>	
-							<th>Action</th>				
+							<th>Car type Name</th>
+							<th>Action</th>					
 						</tr>
 						</thead>
 
 						<tr>
 							<?php $mn = 1; ?>
-							@foreach($services as $r)
-							<td>{{$mn}}</td>
+							@foreach($cars as $r)
+							<td>{{$r->id}}</td>
 							<td>{{$r->name}}</td>
-							<td><a href='service-view/{{$r->id}}'>Edit</a></td>
+							<td><a href='car-types-view/{{$r->id}}'>Edit</a></td>
 							<?php $mn++; ?>
 						</tr>
 						    @endforeach
@@ -38,7 +38,7 @@
                       <td colspan="3" align="center">No data found</td>
                       </tr>
                       @endif	
-                 </table>
+					</table>
                 </div>
                 <!-- /page content -->
             </div>

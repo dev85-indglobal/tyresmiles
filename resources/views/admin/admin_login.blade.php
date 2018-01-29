@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="shortcut icon" href="{{{ URL::to('/public/img/favicon.ico') }}}">
+    <link rel="shortcut icon" href="{{{ URL::to('img/favicon.ico') }}}">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,12 +11,12 @@
     <title>Tyresmiles</title>
 
     <!-- Bootstrap -->
-    <link href="{{ URL::to('public/admin_css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::to('admin_css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="{{ URL::to('public/admin_css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::to('admin_css/font-awesome.min.css') }}" rel="stylesheet">
    
     <!-- Custom Theme Style -->
-    <link href="{{ URL::to('public/admin_css/custom.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::to('admin_css/custom.min.css') }}" rel="stylesheet">
   </head>
 
   <body class="login">

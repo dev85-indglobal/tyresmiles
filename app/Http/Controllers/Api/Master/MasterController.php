@@ -14,6 +14,7 @@ use App\Model\full_car_wash;
 use App\Model\Two_d_wheel_allignment;
 use App\Model\Three_d_wheel_allignment_package;
 use App\Model\Three_d_wheel_allignment;
+use App\Model\media;
 
 
 
@@ -27,13 +28,20 @@ class MasterController extends Controller
     {
     	try{
 			$return_arr = array();
-            $master_services = Master_service_categories::all();
+            $master_services = Master_service_categories::select('master_service_categories.id','master_service_categories.name','media.media_image','media.media_image_thumb')
+                               ->join('media','media.category_id','=','master_service_categories.id')
+                               ->get();
 
 			foreach ($master_services as $ms) {
+					
 					$return_arr[] = array(
 						'master_service_id' =>$ms->id,
-                        'service_name' =>$ms->name,						
+                        'service_name' =>$ms->name,	
+                        'media' => url($ms->media_image),
+                        'media_thumb' =>url($ms->media_image_thumb),					
 					);
+
+				
 			}
 			return response()->json(['success' => true, 'data' => $return_arr, 'message' => 'Master_service_categories'],200);
 		}

@@ -58,14 +58,12 @@
         // of an input field. Validation rules are defined
         // on the right side
         service_name: "required",
-        service_active: "required",
-        service_Img: "required",
+        service_active: "required",     
       },
       // Specify validation error messages
       messages: {
         service_name: "Required",
         service_active: "Required",
-        service_Img: "Required",
       },
     });
 </script>
